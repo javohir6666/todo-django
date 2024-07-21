@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if request.user.is_authenticated %}
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card rounded-3">
+                    <div class="card-body p-4">
+
+                        <h4 class="text-center my-3 pb-3">To Do App</h4>
+
+                        {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+
+                        {% if search %}
+                        <table class="table mb-4">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Todo item</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for todo in search %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ todo.title }}</td>
+                                    <td>
+                                        {% if todo.isDone %}
+                                        Finished
+                                        {% else %}
+                                        In progress
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <form method="post" action="{% url 'delete_todo' todo.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-danger">Delete</button>
+                                        </form>
+                                        {% if not todo.isDone %}
+                                        <form method="post" action="{% url 'toggle_todo' todo.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-success ms-1">Finish</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>  
+                        {% else %}
+                        <table class="table mb-4">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No.</th>
+                                    <th scope="col">Todo item</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                        </table>  
+                        <h2>404 Object not found<h2>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card rounded-3">
+                    <div class="card-body p-4">
+                        <h1>You are not logged in. Please login to access the app.</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock content %}
