@@ -23,4 +23,4 @@ This is a simple To-Do application built with Django. It features user authentic
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/your-repository.git
+   git clone https://github.com/javohir6666/todo-django.git
